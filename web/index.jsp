@@ -162,11 +162,11 @@
         </div>
 
         <!-- Pre-Analysis uploaded graph-->
-        <%    
+        <%
             //String isUploaded = "false";
             String edge = "?";
             String node = "?";
-                
+
             String avpl_ori = "?";
             String dia_ori = "?";
 
@@ -254,7 +254,7 @@
                     }
                 }
                 br = new BufferedReader(new FileReader(oriFilPath + "effective-diameter.txt"));
-                dia_ori = br.readLine(); 
+                dia_ori = br.readLine();
                 //isUploaded = "true";
             } catch (Exception e) {
                 e.printStackTrace();
@@ -270,7 +270,7 @@
                           enctype="multipart/form-data">
                         <input id="input-1a" type="file" name="file" class="file" data-show-preview="false">                       
                     </form>
-                    
+
                     <br>
                     <form action="ScaleGraph.jsp" metho="post">
                         <span>Node size scale from &nbsp;&nbsp;<%=node%> &nbsp;&nbsp;to&nbsp;</span>
@@ -404,20 +404,38 @@
                     <p><span class="glyphicon glyphicon-envelope "></span> a0054808@u.nus.edu</p>
                 </div>
                 <div class="col-sm-7">
-                    <div class="row ">
-                        <div class="col-sm-6 form-group ">
-                            <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+                    <form id="contactForm" action="SendMail.jsp"
+                          target="rfFrame">
+                        <div class="row ">
+                            <div class="col-sm-6 form-group ">
+                                <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+                            </div>
+                            <div class="col-sm-6 form-group ">
+                                <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+                            </div>
                         </div>
-                        <div class="col-sm-6 form-group ">
-                            <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+                        <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
+                        <div class="row ">
+                            <div class="col-sm-12 form-group ">
+                                <button class="btn btn-default pull-right" 
+                                        type="button" onclick="submitForm()">
+                                    Send
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
-                    <div class="row ">
-                        <div class="col-sm-12 form-group ">
-                            <button class="btn btn-default pull-right" type="submit">Send</button>
-                        </div>
-                    </div>
+                        <iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"></iframe> 
+                    </form>
+                    <script>
+                        function submitForm() {
+                            // Get the first form with the name
+                            // Hopefully there is only one, but there are more, select the correct index
+                            var frm = document.getElementById("contactForm");
+                            alert("Thanks for your comments!");
+                            frm.submit(); // Submit
+                            frm.reset();  // Reset
+                            return false; // Prevent page refresh
+                        }
+                    </script>
                 </div>
             </div>
         </div>
