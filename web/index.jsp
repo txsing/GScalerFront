@@ -275,11 +275,11 @@
                     <form action="ScaleGraph.jsp" metho="post">
                         <span>Node size scale from &nbsp;&nbsp;<%=node%> &nbsp;&nbsp;to&nbsp;</span>
                         <input id="nodes" type="number"  name="scaledNodeSize"
-                               placeholder="Scaled Node Size"/>
+                               placeholder=" Node Size After Scale"/>
                         <br>
                         <span>Edge size scale from &nbsp;&nbsp;&nbsp;<%=edge%> &nbsp;&nbsp;to&nbsp;</span>
                         <input id="edges" type="number" name="scaledEdgeSize" 
-                               placeholder="Scaled Edge Size">
+                               placeholder=" Edge Size After Scale">
                         <br><br>                        
                         <input id="scaleBtn" type="submit" class="btn btndow btn-lg" 
                                value="Scale It Now" />
@@ -356,7 +356,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2>Basic Statistics</h2>
-                    <table class="table table-bordered table-inverse">
+                    <table id="figureTable" class="table table-bordered table-inverse">
                         <thead>
                             <tr>
                                 <th></th>

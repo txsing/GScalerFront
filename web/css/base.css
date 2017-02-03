@@ -2,7 +2,7 @@ body {
     font: 400 15px Lato, sans-serif;
     line-height: 1.8;
     font-weight: 400;
-    color: #334d66;
+    color: #303030;
 }
 
 h2 {
@@ -20,12 +20,20 @@ h4 {
     color: #303030;
     margin-bottom: 30px;
 }
-
+th {
+    text-align: center;
+}
+td {
+    text-align: center;
+}
 .bg-grey h2{
     color:#334d66
 }
 .bg-grey ol{
     color:#334d66
+}
+.bg-grey table{
+    color: #334d66
 }
 .notes {
     font-size: 16px;

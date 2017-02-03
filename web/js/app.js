@@ -27,8 +27,8 @@ var height = width * 0.618;
  ];
  */
 
-var nodes = [{id: 0, reflexive: false}],
-        lastNodeId = 0,
+var nodes = [{id: 0, reflexive: false}, {id: 1, reflexive: false }],
+        lastNodeId = 1,
         links = [];
 //document.getElementById("edgelists").innerHTML = "tsads";
 // init D3 force layout
@@ -118,7 +118,7 @@ function tick() {
         return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
     });
 
-    circle.attr('transform', function (d) {
+    circle.attr('transform', function (d) {        
         return 'translate(' + d.x + ',' + d.y + ')';
     });
 }
