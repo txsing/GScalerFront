@@ -398,9 +398,10 @@
             <h2 style="color: #FFFFFF;" class="text-left ">CONTACT</h2>
             <div class="row ">
                 <div class="col-sm-5 ">
-                    <p>Please feel free to provide us your precious comments to make GScaler better!</p>
+                    <p>Please feel free to give us your precious comments to make GScaler better!</p>
                     <p><span class="glyphicon glyphicon-map-marker "></span> School of Computing</p>
                     <p><span class="glyphicon glyphicon-map-marker "></span> National University of Singapore</p>
+                    <p><span class="glyphicon glyphicon-map-marker "></span> 13 Computing Drive, Singapore, 117417</p>
                     <p><span class="glyphicon glyphicon-envelope "></span> a0054808@u.nus.edu</p>
                 </div>
                 <div class="col-sm-7">
@@ -419,7 +420,7 @@
                             <div class="col-sm-12 form-group ">
                                 <button class="btn btn-default pull-right" 
                                         type="button" onclick="submitForm()">
-                                    Send
+                                    Send Email
                                 </button>
                             </div>
                         </div>

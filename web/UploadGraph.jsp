@@ -13,6 +13,7 @@
     String timestamp = System.currentTimeMillis() + "";
     String rootpath = request.getServletContext().getRealPath("");
     String uploadDir = rootpath + File.separator + "uploadedfiles" + File.separator + timestamp + File.separator;
+    System.err.println(uploadDir);
     new File(uploadDir).mkdir();
     
     // Verify the content type
@@ -21,9 +22,6 @@
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
         factory.setSizeThreshold(maxMemSize);
-        // Location to save data that is larger than maxMemSize.
-        factory.setRepository(new File("c:\\temp"));
-
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
         // maximum file size to be uploaded.
