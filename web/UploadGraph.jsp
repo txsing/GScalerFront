@@ -12,8 +12,7 @@
     int maxMemSize = 50000 * 1024;
     String timestamp = System.currentTimeMillis() + "";
     String rootpath = request.getServletContext().getRealPath("");
-    String uploadDir = rootpath + File.separator + "uploadedfiles" + File.separator + timestamp + File.separator;
-    System.err.println(uploadDir);
+    String uploadDir = rootpath + File.separator + "uploadedfiles" + File.separator + timestamp + File.separator;   
     new File(uploadDir).mkdir();
     
     // Verify the content type
@@ -47,7 +46,7 @@
             response.setStatus(response.SC_MOVED_TEMPORARILY);
             response.setHeader("Location", "index.jsp#uploadAndScale");
         } catch (Exception ex) {
-            System.out.println(ex);
+            System.err.println("EXP(UploadGraph): ".concat(ex.getMessage()));
         }
     } else {
         out.println("<html>");

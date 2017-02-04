@@ -133,7 +133,7 @@
                     </ol>
                     <br>
                     <div class="row">
-                        <div style="padding-left:40px;" class="col-md-5">
+                        <div class="col-md-5">
                             <button style="padding: 8px 16px;" class="btn btndow btn-lg" id="downloadLink" onclick="downloadGraphFile()">
                                 Download Graph
                             </button>
@@ -153,7 +153,7 @@
                                 }
                             </script>                            
                         </div>
-                        <div class="col-md-7">
+                        <div class="col-md-7" align="left">
                             <a style="padding: 8px 16px;" class="btn btndow btn-lg" href="#uploadAndScale">Upload &amp; Scale Graph</a>
                         </div>
                     </div>
@@ -164,14 +164,16 @@
         <!-- Pre-Analysis uploaded graph-->
         <%
             //String isUploaded = "false";
+            String rawFilePath = "";
+            String uploadDir = "";
+
             String edge = "?";
             String node = "?";
 
             String avpl_ori = "?";
             String dia_ori = "?";
 
-            String rawFilePath = "";
-            String uploadDir = "";
+            String ori_coc = "?";
             try {
                 rawFilePath = session.getAttribute("uploadedFilePath").toString();//gets the path of the file which was uploaded
                 if (rawFilePath == null
@@ -181,10 +183,10 @@
                 }
                 //Reads file from where it is locally stored and counts the number if edges and nodes in the original file.
                 //When the file is stored in the server,the code to read the file will have to be modified.     
-                BufferedReader bi = new BufferedReader(new FileReader(rawFilePath));
+                BufferedReader br = new BufferedReader(new FileReader(rawFilePath));
                 HashMap<Integer, Integer> uidCounts = new HashMap<Integer, Integer>();
                 HashMap<Integer, Integer> fidCounts = new HashMap<Integer, Integer>();
-                String line = bi.readLine();
+                String line = br.readLine();
                 int nodesize = 77360;
                 int edgesize = 0;
                 while (line != null) {
@@ -211,9 +213,9 @@
                             fidCounts.put(uid, 0);
                         }
                     }
-                    line = bi.readLine();
+                    line = br.readLine();
                 }
-                bi.close();
+                br.close();
                 nodesize = fidCounts.size();
                 edge = edgesize + "";
                 node = nodesize + "";
@@ -224,19 +226,19 @@
                 uploadDir = session.getAttribute("uploadDir").toString();
                 String oriFilPath = uploadDir.concat("ori.txt");
 
-                String[] args2 = new String[8];
-                args2[0] = "-i";
-                args2[1] = rawFilePath;
-                args2[2] = "-m";
-                args2[3] = "hop";
-                args2[4] = "-o";
-                args2[5] = oriFilPath;
-                args2[6] = "-s";
-                args2[7] = "0";
+                String[] args1 = new String[8];
+                args1[0] = "-i";
+                args1[1] = rawFilePath;
+                args1[2] = "-m";
+                args1[3] = "hop";
+                args1[4] = "-o";
+                args1[5] = oriFilPath;
+                args1[6] = "-s";
+                args1[7] = "0";
                 PropertyCalculation pc1 = new PropertyCalculation();
-                pc1.doMain(args2);
+                pc1.doMain(args1);
 
-                BufferedReader br = new BufferedReader(new FileReader(oriFilPath + "avpl.txt"));
+                br = new BufferedReader(new FileReader(oriFilPath + "avpl.txt"));
                 String oc1 = br.readLine();
                 int c1 = 1;
                 char ch11;
@@ -255,16 +257,61 @@
                 }
                 br = new BufferedReader(new FileReader(oriFilPath + "effective-diameter.txt"));
                 dia_ori = br.readLine();
+                br.close();
+
+                // Caculate Average Clustering Coefficient
+                String e = rawFilePath;
+                String[] args2 = new String[6];
+                args2[0] = "-i";
+                args2[1] = e;
+                args2[2] = "-o";
+                args2[3] = oriFilPath;
+                args2[4] = "-m";
+                args2[5] = "coc";
+                pc1.doMain(args2);
+                br = new BufferedReader(new FileReader(uploadDir.concat("ori.txt2COC.txt")));
+                String oc = br.readLine();
+                br.close();
+                int c = 1;
+                ori_coc = "";
+                char ch1;
+                for (int i = 0; i < oc.length(); i++) {
+                    if (c > 3) {
+                        break;
+                    }
+                    ch1 = oc.charAt(i);
+                    if (ch1 == '0') {
+                        ori_coc += ch1;
+                    } else {
+                        c++;
+                        ori_coc += ch1;
+                    }
+                }
                 //isUploaded = "true";
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("EXP(PreAnls): " + e.getMessage());
+                System.err.println(e.getStackTrace()[0]);
             }
         %> 
 
         <!-- Container (File Upload & Scale Section) -->
         <div id="uploadAndScale" class="container-fluid">
             <div class="row ">
-                <div class="col-sm-7 ">
+                <div class="col-sm-7 text-left">
+                    <h2>FORMAT INSTRUCTIONS</h2>
+                    <ol class="notes">
+                        <li>Only <strong>TEXT</strong> files are supported, we recommend '.txt' file.</li>
+                        <br>
+                        <li>The format of each line: <strong>[number1][whitespace][number2]</strong></li>
+                        <br>
+                        <li>For example, <strong>"1&nbsp;&nbsp;&nbsp;&nbsp;2"</strong> 
+                            represents an edge point from vertex 1 to vertex 2. <br>(noted that the graph is 
+                            <strong>DIRECTED</strong>).</li>
+                        <br>
+                        <li>Please <strong>UPLOAD FIRST</strong> and <strong>SCALE AFTER</strong>.</li>
+                    </ol>
+                </div>
+                <div class="col-sm-5 ">
                     <h2>Upload Graph File</h2>
                     <form action="UploadGraph.jsp" method="post"                         
                           enctype="multipart/form-data">
@@ -275,29 +322,19 @@
                     <form action="ScaleGraph.jsp" metho="post">
                         <span>Node size scale from &nbsp;&nbsp;<%=node%> &nbsp;&nbsp;to&nbsp;</span>
                         <input id="nodes" type="number"  name="scaledNodeSize"
+                               onkeyup="if(this.value.length===1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'');}"  
+                               onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'');}"
                                placeholder=" Node Size After Scale"/>
                         <br>
                         <span>Edge size scale from &nbsp;&nbsp;&nbsp;<%=edge%> &nbsp;&nbsp;to&nbsp;</span>
-                        <input id="edges" type="number" name="scaledEdgeSize" 
+                        <input id="edges" type="number" name="scaledEdgeSize"
+                               onkeyup="if(this.value.length===1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'');}"  
+                               onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
                                placeholder=" Edge Size After Scale">
-                        <br><br>                        
-                        <input id="scaleBtn" type="submit" class="btn btndow btn-lg" 
+                        <br><br>                       
+                        <input id="scaleBtn" type="submit" class="btn btndow btn-lg"                               
                                value="Scale It Now" />
                     </form>
-                </div>
-                <div class="col-sm-5 text-left">
-                    <h2>INSTRUCTIONS</h2>
-                    <ol class="notes">
-                        <li>Only <strong>TEXT</strong> files are supported, we recommend '.txt' file.</li>
-                        <br>
-                        <li>The format of each line: <strong>[number1][tab][number2]</strong></li>
-                        <br>
-                        <li>For example, <strong>"1&nbsp;&nbsp;&nbsp;&nbsp;2"</strong> 
-                            represents an edge point from vertex 1 to vertex 2. (noted that the graph is 
-                            <strong>DIRECTED</strong>).</li>
-                        <br>
-                        <li>Please <strong>UPLOAD FIRST</strong> and scale after.</li>
-                    </ol>
                 </div>
             </div>
         </div>
@@ -306,8 +343,11 @@
         <%
             String scaledNodeSize = "?";
             String scaledEdgeSize = "?";
+
             String dia = "?";
             String avpl = "?";
+
+            String coc = "?";
             try {
                 scaledNodeSize = session.getAttribute("scaledNodeSize").toString();
                 scaledEdgeSize = session.getAttribute("scaledEdgeSize").toString();
@@ -315,6 +355,7 @@
                 String scaledFilePath = uploadDir.concat("scaled.txt");
                 String t2FilePath = uploadDir.concat("t2.txt");
 
+                // Caculate Average Shortest Path & Effective Diameter
                 String[] args1 = new String[8];
                 args1[0] = "-i";
                 args1[1] = scaledFilePath;
@@ -329,6 +370,8 @@
 
                 BufferedReader br1 = new BufferedReader(new FileReader(t2FilePath + "avpl.txt"));
                 String oc = br1.readLine();
+                br1.close();
+
                 int c = 1;
                 char ch1;
                 avpl = "";
@@ -346,8 +389,38 @@
                 }
                 br1 = new BufferedReader(new FileReader(t2FilePath + "effective-diameter.txt"));
                 dia = br1.readLine();
+                br1.close();
+
+                // Caculate Average Clustering Coefficient
+                String[] args = new String[6];
+                args[0] = "-i";
+                args[1] = scaledFilePath;
+                args[2] = "-o";
+                args[3] = t2FilePath;
+                args[4] = "-m";
+                args[5] = "coc";
+                pc.doMain(args);
+
+                br1 = new BufferedReader(new FileReader(uploadDir.concat("t2.txt2COC.txt")));
+                oc = br1.readLine();
+                br1.close();
+                c = 1;
+                coc = "";
+                for (int i = 0; i < oc.length(); i++) {
+                    if (c > 3) {
+                        break;
+                    }
+                    ch1 = oc.charAt(i);
+                    if (ch1 == '0') {
+                        coc += ch1;
+                    } else {
+                        c++;
+                        coc += ch1;
+                    }
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("EXP(ScaleAnls): " + e.getMessage());
+                System.err.println(e.getStackTrace()[0]);
             }
         %>
         
@@ -374,7 +447,7 @@
                                 <td><span> <%=edge%> </span></td>
                                 <td><span> <%=dia_ori%> </span></td>
                                 <td><span> <%=avpl_ori%> </span></td>
-                                <td><span> <%=node%> </span></td>
+                                <td><span> <%=ori_coc%> </span></td>
                             </tr>
                             <tr>
                                 <th scope="row">Scaled</th>
@@ -382,13 +455,29 @@
                                 <td><span> <%=scaledEdgeSize%> </span></td>
                                 <td><span> <%=dia%> </span></td>
                                 <td><span> <%=avpl%> </span></td>
-                                <td><span> <%=node%> </span></td>
+                                <td><span> <%=coc%> </span></td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table>                      
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7" align="left">
                     <form action="DownloadScaledGraph.jsp">                              
-                        <input type="submit" value="Download Scaled Graph" style="padding: 8px 16px;" class="btn btndow btn-lg">
+                        <input type="submit" value="Download Scaled Graph" 
+                               style="padding: 8px 16px;" class="btn btndow btn-lg">
                     </form>
+
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="GraphViz.jsp">Visualize Scaled Graph</a>
+                        </div>
+                        <div class="col-md-7" align="right">
+                            <a style="padding: 8px 16px;" class="btn btndow btn-lg" href="#analysis">In/Out Degree Comparison</a>  
+                        </div>                        
+                    </div>
                 </div>
             </div>
         </div>
@@ -398,7 +487,7 @@
             <h2 style="color: #FFFFFF;" class="text-left ">CONTACT</h2>
             <div class="row ">
                 <div class="col-sm-5 ">
-                    <p>Please feel free to give us your precious comments to make GScaler better!</p>
+                    <p>Please feel free to leave your precious comments to help us make GScaler better!</p>
                     <p><span class="glyphicon glyphicon-map-marker "></span> School of Computing</p>
                     <p><span class="glyphicon glyphicon-map-marker "></span> National University of Singapore</p>
                     <p><span class="glyphicon glyphicon-map-marker "></span> 13 Computing Drive, Singapore, 117417</p>
