@@ -23,13 +23,13 @@
     </head>
 
     <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-        <div style="padding: 0px" class="container">
         <div class="top">
             <a href="#home"><img id="rotate" src="img/top.png" width="70" height="70" alt="top" /></a>
         </div>
         <!-- Nav Bar-->
         <nav class="navbar navbar-default navbar-fixed-top">
-                <div style="margin-left: 20px" class="navbar-header">
+            <div class="container">
+                <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -39,7 +39,7 @@
                         <p style="font-style:italic; font-weight: 700;">gScaler</p>
                     </a>
                 </div>
-                <div style="margin-right: 20px" class="collapse navbar-collapse" id="myNavbar">
+                <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="#about">ABOUT</a>
@@ -58,10 +58,11 @@
                         </li>
                     </ul>
                 </div>
+            </div>
         </nav>
 
         <!-- Jumbotron -->
-        <div style="border-radius: 0px;" id="home" class="jumbotron text-center">
+        <div id="home" class="jumbotron text-center">
             <h1>GScaler Cloud</h1>
             <p>GScaler is a tool to scale your graph up or down while guarantee the topology of resulting graph <br> similar to orginal one.</p>
         </div>
@@ -528,6 +529,5 @@
                 </div>
             </div>
         </div>
-    <div>
     </body>
 </html>

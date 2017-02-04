@@ -43,6 +43,7 @@ td {
 }
 
 .btndow {
+    margin-bottom: 8px;
     color: #fff !important;
     font-family: 'Open Sans', sans-serif;
     text-decoration: none;
@@ -82,7 +83,7 @@ td {
 }
 
 .bg-grey {
-    background-color: #f6f6f6;
+    background-color: #f5f6eb;
 }
 
 .logo-small {
@@ -284,5 +285,11 @@ footer .glyphicon {
 @media screen and (max-width: 480px) {
     .logo {
         font-size: 150px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .container {
+        width: 1263px;
     }
 }
