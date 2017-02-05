@@ -474,7 +474,7 @@
                             <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="GraphViz.jsp">Visualize Scaled Graph</a>
                         </div>
                         <div class="col-md-7" align="right">
-                            <a style="padding: 8px 16px;" class="btn btndow btn-lg" href="#analysis">In/Out Degree Comparison</a>  
+                            <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="DegreeComparison.jsp">In/Out Degree Comparison</a>  
                         </div>                        
                     </div>
                 </div>
