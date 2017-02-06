@@ -1,22 +1,22 @@
+<%@page import="java.io.*"%>
+<%@page import="propertycalculation.*" %>
+<%@page import="backtofront.*" %>
+<%@ page import="java.io.*,java.util.*, javax.servlet.*" %>
+<%@ page import="javax.servlet.http.*" %>
 <!DOCTYPE html>
 <html lang="en">
-    <%@page import="java.io.*"%>
-    <%@page import="propertycalculation.*" %>
-    <%@page import="backtofront.*" %>%>
-    <%@ page import="java.io.*,java.util.*, javax.servlet.*" %>
-    <%@ page import="javax.servlet.http.*" %>
-    <head
-        <title>GScaler Cloud</title>
+    <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>GScaler Cloud</title>
+        <link rel="nus icon" type="image/vnd.microsoft.icon" href="favicon.ico"/>
         <link rel="stylesheet" href="bootstrap-3.3.7/css/bootstrap.min.css">
-        <link href="img/favicon.ico" rel="nus icon" type="image/png" />
         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-        <link href="fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+        <link href="fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="css/app.css">
-        <link href="fileinput/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="css/base.css" />
+        <link href="fileinput/css/fileinput.css" media="all" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="css/base.css">
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="fileinput/js/fileinput.js" type="text/javascript"></script>
         <script src="bootstrap-3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
@@ -28,7 +28,7 @@
             <div class="top">
                 <a href="#home"><img id="rotate" src="img/top.png" width="70" height="70" alt="top" /></a>
             </div>
-            
+
             <!-- Nav Bar-->
             <nav class="navbar navbar-default navbar-fixed-top">
                 <div style="margin-left: 20px" class="navbar-header">
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-md-4">
                         <br><br><br>
-                        <div align="center"><img src="img/lo.png"></div>
+                        <div align="center"><img src="img/logo.png"></div>
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
                 } catch (Exception e) {
                     System.err.println("EXP(PreAnls): " + e.getMessage());
                     System.err.println(e.getStackTrace()[0]);
-                    
+
                 }
             %> 
 
@@ -295,7 +295,7 @@
                     System.err.println(e.getStackTrace()[0]);
                 }
             %>
-            
+
             <!-- Container (analysis Section) -->
             <div id="analysis" class="container-fluid bg-grey ">
                 <div class="row">
@@ -344,7 +344,7 @@
                     <div class="col-md-5">
                         <div class="row">
                             <div class="col-md-5">
-                                <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="GraphViz.jsp">Visualize Scaled Graph</a>
+                                <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="GraphViz.jsp">Graph Visualization</a>
                             </div>
                             <div class="col-md-7" align="right">
                                 <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="DegreeComparison.jsp">In/Out Degree Comparison</a>  

@@ -96,4 +96,28 @@ public class BasicStatisticCal {
     public static String getKSD() {
         return null;
     }
+
+    public static String[] getGraphVizJson(String filePath, int nodeSize) {
+        try {
+            String nodeJson = "[";
+            for (int i = 0; i < nodeSize - 1; i++) {
+                nodeJson = nodeJson + "{data: {id: \'" + i + "\'}},\n";
+            }
+            nodeJson = nodeJson.concat("{data: {id: \'" + (nodeSize - 1) + "\'}}]");
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+
+            String edgeJson = "";
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] twoV = line.split("\\s+");
+                edgeJson = edgeJson + ",\n{data: {source: \'" + twoV[0] + "\', target: \'"
+                        + twoV[1] + "\'}}";
+            }
+            edgeJson = "[" + edgeJson.substring(2) + "]";
+            return new String[]{nodeJson, edgeJson};
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
 }

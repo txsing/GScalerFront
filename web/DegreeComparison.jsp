@@ -23,22 +23,27 @@
 <!DOCTYPE html>
   <html>
   <head>
+    <title>In/Out Degree Distribution</title>
+    <link rel="nus icon" type="image/vnd.microsoft.icon" href="favicon.ico"/>
+    <style>
+        body{text-align: center}
+        .chartdiv{ margin:0 auto; width:400px; height:100px;} 
+    </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
             google.charts.load('current', {'packages':['line']});
       google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-
       var data = new google.visualization.DataTable();
-      data.addColumn('number', 'Degree');
+      data.addColumn('number', 'In Degree');
       data.addColumn('number', 'raw graph');
       data.addColumn('number', 'scaled graph');
 
       data.addRows(<%=inDegreePlotString%>);
 
       var data1 = new google.visualization.DataTable();
-      data1.addColumn('number', 'Degree');
+      data1.addColumn('number', 'Out Degree');
       data1.addColumn('number', 'raw graph');
       data1.addColumn('number', 'scaled graph');
 
@@ -46,7 +51,7 @@
       
       var options = {
         chart: {
-          title: 'In Degree Distribution',         
+          title: 'In Degree Distribution'       
         },
         width: 900,
         height: 500
@@ -54,7 +59,7 @@
       
       var options1 = {
         chart: {
-          title: 'Out Degree Distribution',
+          title: 'Out Degree Distribution'
         },
         width: 900,
         height: 500
@@ -71,8 +76,8 @@
     </script>
   </head>
   <body>
-    <div id="linechart_material" style="width: 900px; height: 500px"></div>
+    <div class="chartdiv" id="linechart_material" style="width: 900px; height: 500px"></div>
     <br>
-    <div id="linechart_material1" style="width: 900px; height: 500px"></div>
+    <div class="chartdiv" id="linechart_material1" style="width: 900px; height: 500px"></div>
   </body>
 </html>
