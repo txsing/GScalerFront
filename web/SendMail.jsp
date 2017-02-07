@@ -3,7 +3,7 @@
     Created on : Feb 3, 2017, 8:44:32 PM
     Author     : v-xinti
 --%>
-<%@page import="propertycalculation.PlainTextEmailSender" %>
+<%@page import="backtofront.PlainTextEmailSender" %>
 <%
     String name = request.getParameter("name");
     String email = request.getParameter("email");
@@ -18,7 +18,7 @@
     String mailFrom = "txsing@gmail.com";
     String password = "zrrfouhbtqibwxvl";
     // outgoing message information
-    String mailTo = "txsing@icloud.com";
+    String mailTo = "a0054808@u.nus.edu";
     String sender = args[0];
     String subject = args[1];
     String message = sender.concat(": ").concat(args[2]);

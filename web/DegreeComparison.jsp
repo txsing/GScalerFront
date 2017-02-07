@@ -51,7 +51,7 @@
       
       var options = {
         chart: {
-          title: 'In Degree Distribution'       
+          title: 'In Degree Distribution'
         },
         width: 900,
         height: 500

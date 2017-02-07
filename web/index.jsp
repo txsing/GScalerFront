@@ -164,7 +164,7 @@
 
             <!-- Pre-Analysis uploaded graph -->
             <%
-                //String isUploaded = "false";
+                Boolean isUploaded = false;
                 String uploadedFilePath = "";
                 String uploadDir = "";
 
@@ -181,8 +181,9 @@
                             || uploadedFilePath.length() == 0
                             || uploadedFilePath.equals("")) {//to check if there is any input. 
                         uploadedFilePath = "";
+                    } else {
+                        isUploaded = true;
                     }
-
                     int[] rawGNandEsize = NodeEdgeSizeCal.getNodeAndEdgeSize(uploadedFilePath);
                     if (rawGNandEsize != null) {
                         node = Integer.toString(rawGNandEsize[0]);
@@ -207,14 +208,12 @@
                 } catch (Exception e) {
                     System.err.println("EXP(PreAnls): " + e.getMessage());
                     System.err.println(e.getStackTrace()[0]);
-
                 }
             %> 
 
             <!-- Container (File Upload & Scale Section) -->
             <div id="uploadAndScale" class="container-fluid">
                 <div class="row ">
-
                     <div class="col-sm-7 ">
                         <h2>Upload &amp; Scale Graph</h2>
                         <form action="UploadGraph.jsp" method="post"                         
@@ -222,7 +221,7 @@
                             <input id="input-1a" type="file" name="file" class="file" data-show-preview="false">                       
                         </form>
                         <br>
-                        <form action="ScaleGraph.jsp" metho="post">
+                        <form id="scaleForm" action="ScaleGraph.jsp" metho="post">
                             <span>Node size scale from &nbsp;&nbsp;<%=node%> &nbsp;&nbsp;to&nbsp;</span>
                             <input id="nodes" name="scaledNodeSize"
                                    onkeyup="if (this.value.length === 1) {
@@ -242,9 +241,22 @@
                                            }"  
                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
                                    placeholder=" &nbsp;&nbsp;&nbsp;Input Scaled Edge Size">
-                            <br><br>                       
-                            <input id="scaleBtn" type="submit" class="btn btndow btn-lg"                               
-                                   value="Scale It Now" />
+                            <br><br>
+                            <a id="scaleBtn" style="padding: 8px 16px;" class="btn btndow btn-lg">Scale It Now</a>
+                            <script>
+                                function submitScaleForm() {
+                                    console.log(document.getElementById('nodes').value);
+                                    var nodesize = document.getElementById('nodes').value;
+                                    var edgesize = document.getElementById('edges').value;
+                                    if (nodesize !== null && nodesize !== ""
+                                            && edgesize !== null && edgesize !== "") {
+                                        document.getElementById('scaleForm').submit();
+                                        return false;
+                                    } else {
+                                        alert("Please Input Scaled Node/Edge Size!");
+                                    }
+                                }
+                            </script>
                         </form>
                     </div>
                     <div class="col-sm-5 text-left">
@@ -266,6 +278,7 @@
 
             <!--Calculate Analysis Figures -->
             <%
+                Boolean isScaled = false;
                 String scaledNodeSize = "N/A";
                 String scaledEdgeSize = "N/A";
 
@@ -285,6 +298,7 @@
                     if (avplAndDia != null) {
                         avpl = avplAndDia[0];
                         dia = avplAndDia[1];
+                        isScaled = true;
                     }
 
                     String tmp = BasicStatisticCal.getAvgClusteringCof(uploadedFilePath, t2FilePath, uploadDir);
@@ -335,19 +349,24 @@
                 </div>
                 <div class="row">
                     <div class="col-md-7" align="left">
-                        <form action="DownloadScaledGraph.jsp">                              
-                            <input type="submit" value="Download Scaled Graph" 
-                                   style="padding: 8px 16px;" class="btn btndow btn-lg">
+                        <form id="downScaledForm" action="DownloadScaledGraph.jsp">  
+                            <a id="downScaledBtn" style="padding: 8px 16px;" class="btn btndow btn-lg">Download Scaled Graph</a>
+                            <script>
+                                function submitDownScaledGraphForm() {
+                                    document.getElementById('downScaledForm').submit();
+                                    return false;
+                                }
+                            </script>
                         </form>
 
                     </div>
                     <div class="col-md-5">
                         <div class="row">
                             <div class="col-md-5">
-                                <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="GraphViz.jsp">Graph Visualization</a>
+                                <a id="gViz" style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank">Graph Visualization</a>
                             </div>
                             <div class="col-md-7" align="right">
-                                <a style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank" href="DegreeComparison.jsp">In/Out Degree Comparison</a>  
+                                <a id="dCmp" style="padding: 8px 16px;" class="btn btndow btn-lg" target="_blank">In/Out Degree Comparison</a>  
                             </div>                        
                         </div>
                     </div>
@@ -401,6 +420,22 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+                $(function () {
+                    var isUploaded = <%=isUploaded%>;
+                    var isScaled = <%=isScaled%>
+                    console.log(isUploaded);
+                    if (isUploaded === true) {
+                        $('#scaleBtn').attr('onclick', 'submitScaleForm()');
+                    }
+                    if (isScaled === true) {
+                        $('#gViz').attr('href', 'GraphViz.jsp');
+                        $('#dCmp').attr('href', 'DegreeComparison.jsp');
+                        $('#downScaledBtn').attr('onclick', 'submitDownScaledGraphForm()');
+                    }
+                });
+            </script>
         </div>    
     </body>
 </html>
