@@ -34,17 +34,17 @@
                 font-size: 14px;
             }
             #cy {
-                float:left; border:1px solid #334d66;
-                width: 49%;
-                height: 100%;
+                float:left; border:2px solid #334d66;
+                width: 48.9%;
+                height: 93%;
                 left: 0;
                 top: 0;
                 z-index: 999;
             }
             #cx {
-                float:right; border:1px solid #334d66;      
-                width: 49%;
-                height: 100%;
+                float:right; border:2px solid #bf5a24;      
+                width: 48.9%;
+                height: 93%;
                 left: 0;
                 top: 0;
                 z-index: 999;

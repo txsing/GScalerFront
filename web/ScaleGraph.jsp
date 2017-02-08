@@ -35,8 +35,9 @@
     
     long start = new java.util.Date().getTime();
     session.setAttribute("start", start);
-    
+ 
     scaler.run(args);
+    
     long end = new java.util.Date().getTime();
     session.setAttribute("end", end);
 
@@ -45,15 +46,9 @@
     FileInputStream  fin = new FileInputStream(outputDir.concat("exception.txt"));
     if (fin.available() == 0) {
         response.setStatus(response.SC_MOVED_TEMPORARILY);
-        //redirect location
         response.setHeader("Location", "index.jsp#analysis");
     } else {
         response.setStatus(response.SC_MOVED_TEMPORARILY);
-        //redirect location
         response.setHeader("Location", "exceptions.jsp");
     }
-//    final ProcessBuilder pbr = new ProcessBuilder("/bin/sh", "copy.sh", session.getAttribute("filePath").toString());
-//    pbr.directory(new File(session.getAttribute("originalPath").toString()));
-//    Process p = pbr.start();
-//    p.waitFor();
 %>

@@ -5,6 +5,7 @@
 <%@ page import="javax.servlet.http.*" %>
 <!DOCTYPE html>
 <html lang="en">
+    <!-- header -->
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +23,9 @@
         <script src="bootstrap-3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     </head>
 
+    <!-- body -->
     <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+        <!-- Container (Whole Page) -->
         <div style="padding: 0px" class="container">
             <!-- Top -->
             <div class="top">
@@ -162,7 +165,7 @@
                 </div>
             </div>
 
-            <!-- Pre-Analysis uploaded graph -->
+            <!-- (Java Code) Raw Graph Analysis -->
             <%
                 Boolean isUploaded = false;
                 String uploadedFilePath = "";
@@ -177,36 +180,30 @@
                 String coc_ori = "N/A";
                 try {
                     uploadedFilePath = session.getAttribute("uploadedFilePath").toString();//gets the path of the file which was uploaded
-                    if (uploadedFilePath == null
-                            || uploadedFilePath.length() == 0
-                            || uploadedFilePath.equals("")) {//to check if there is any input. 
-                        uploadedFilePath = "";
-                    } else {
-                        isUploaded = true;
-                    }
-                    int[] rawGNandEsize = NodeEdgeSizeCal.getNodeAndEdgeSize(uploadedFilePath);
-                    if (rawGNandEsize != null) {
-                        node = Integer.toString(rawGNandEsize[0]);
-                        edge = Integer.toString(rawGNandEsize[1]);
-                    }
+                    if (!(uploadedFilePath == null || uploadedFilePath.equals(""))) {
+                        int[] rawGNandEsize = NodeEdgeSizeCal.getNodeAndEdgeSize(uploadedFilePath);
+                        if (rawGNandEsize != null) {
+                            node = Integer.toString(rawGNandEsize[0]);
+                            edge = Integer.toString(rawGNandEsize[1]);
+                        }
 
-                    session.setAttribute("originalnode", node);
-                    session.setAttribute("originaledge", edge);
+                        session.setAttribute("originalnode", node);
+                        session.setAttribute("originaledge", edge);
 
-                    uploadDir = session.getAttribute("uploadDir").toString();
-                    String oriFilPath = uploadDir.concat("ori.txt");
+                        uploadDir = session.getAttribute("uploadDir").toString();
+                        String oriFilPath = uploadDir.concat("ori.txt");
 
-                    String[] rawAvplAndDia = BasicStatisticCal
-                            .getEffectiveDiaAndAvgShortestPathLen(uploadedFilePath, oriFilPath);
-                    if (rawAvplAndDia != null) {
+                        String[] rawAvplAndDia = BasicStatisticCal
+                                .getEffectiveDiaAndAvgShortestPathLen(uploadedFilePath, oriFilPath);
+
                         avpl_ori = rawAvplAndDia[0];
                         dia_ori = rawAvplAndDia[1];
-                    }
 
-                    String tmp = BasicStatisticCal.getAvgClusteringCof(uploadedFilePath, oriFilPath, uploadDir);
-                    coc_ori = tmp == null ? coc_ori : tmp;
+                        coc_ori = BasicStatisticCal.getAvgClusteringCof(uploadedFilePath, oriFilPath, uploadDir);
+                        isUploaded = true;
+                    }
                 } catch (Exception e) {
-                    System.err.println("EXP(PreAnls): " + e.getMessage());
+                    System.err.println("EXP(rawAnls): " + e.getMessage());
                     System.err.println(e.getStackTrace()[0]);
                 }
             %> 
@@ -276,41 +273,44 @@
                 </div>
             </div>
 
-            <!--Calculate Analysis Figures -->
+            <!-- (Java Code) Scaled Graph Analysis -->
             <%
-                Boolean isScaled = false;
+                String avpl = "N/A";
+                String coc = "N/A";
+                String dia = "N/A";
                 String scaledNodeSize = "N/A";
                 String scaledEdgeSize = "N/A";
+                Boolean isScaled = false;
 
-                String dia = "N/A";
-                String avpl = "N/A";
+                if (isUploaded) {
+                    Object scaledNodeSizeObj = session.getAttribute("scaledNodeSize");
+                    Object scaledEdgeSizeObj = session.getAttribute("scaledEdgeSize");
+                    if (scaledNodeSizeObj != null && scaledEdgeSizeObj != null) {
 
-                String coc = "N/A";
-                try {
-                    scaledNodeSize = session.getAttribute("scaledNodeSize").toString();
-                    scaledEdgeSize = session.getAttribute("scaledEdgeSize").toString();
+                        scaledNodeSize = (String) scaledNodeSizeObj;
+                        scaledEdgeSize = (String) scaledEdgeSizeObj;
+                        try {
+                            String scaledFilePath = uploadDir.concat("scaled.txt");
+                            String t2FilePath = uploadDir.concat("t2.txt");
 
-                    String scaledFilePath = uploadDir.concat("scaled.txt");
-                    String t2FilePath = uploadDir.concat("t2.txt");
+                            String[] avplAndDia = BasicStatisticCal
+                                    .getEffectiveDiaAndAvgShortestPathLen(scaledFilePath, t2FilePath);
 
-                    String[] avplAndDia = BasicStatisticCal
-                            .getEffectiveDiaAndAvgShortestPathLen(scaledFilePath, t2FilePath);
-                    if (avplAndDia != null) {
-                        avpl = avplAndDia[0];
-                        dia = avplAndDia[1];
-                        isScaled = true;
+                            avpl = avplAndDia[0];
+                            dia = avplAndDia[1];
+
+                            coc = BasicStatisticCal.getAvgClusteringCof(uploadedFilePath, t2FilePath, uploadDir);
+
+                            isScaled = true;
+                        } catch (Exception e) {
+                            System.err.println("EXP(ScaleAnls): " + e.getMessage());
+                            System.err.println(e.getStackTrace()[0]);
+                        }
                     }
-
-                    String tmp = BasicStatisticCal.getAvgClusteringCof(uploadedFilePath, t2FilePath, uploadDir);
-                    coc = tmp == null ? coc : tmp;
-
-                } catch (Exception e) {
-                    System.err.println("EXP(ScaleAnls): " + e.getMessage());
-                    System.err.println(e.getStackTrace()[0]);
                 }
             %>
 
-            <!-- Container (analysis Section) -->
+            <!-- Container (Analysis Section) -->
             <div id="analysis" class="container-fluid bg-grey ">
                 <div class="row">
                     <div class="col-md-12">
@@ -349,7 +349,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-7" align="left">
-                        <form id="downScaledForm" action="DownloadScaledGraph.jsp">  
+                        <form id="downScaledForm" action="DownloadScaledGraph">  
                             <a id="downScaledBtn" style="padding: 8px 16px;" class="btn btndow btn-lg">Download Scaled Graph</a>
                             <script>
                                 function submitDownScaledGraphForm() {
@@ -399,7 +399,7 @@
                             <div class="row ">
                                 <div class="col-sm-12 form-group ">
                                     <button class="btn btn-default pull-right" 
-                                            type="button" onclick="submitForm()">
+                                            type="button" onclick="submitContactForm()">
                                         Send Email
                                     </button>
                                 </div>
@@ -407,11 +407,11 @@
                             <iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"></iframe> 
                         </form>
                         <script>
-                            function submitForm() {
+                            function submitContactForm() {
                                 // Get the first form with the name
                                 // Hopefully there is only one, but there are more, select the correct index
                                 var frm = document.getElementById("contactForm");
-                                alert("Thanks for your comments!");
+                                alert("Thanks for your precious comments!");
                                 frm.submit(); // Submit
                                 frm.reset();  // Reset
                                 return false; // Prevent page refresh
