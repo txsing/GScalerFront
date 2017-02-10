@@ -242,7 +242,6 @@
                             <a id="scaleBtn" style="padding: 8px 16px;" class="btn btndow btn-lg">Scale It Now</a>
                             <script>
                                 function submitScaleForm() {
-                                    console.log(document.getElementById('nodes').value);
                                     var nodesize = document.getElementById('nodes').value;
                                     var edgesize = document.getElementById('edges').value;
                                     if (nodesize !== null && nodesize !== ""
@@ -250,7 +249,7 @@
                                         document.getElementById('scaleForm').submit();
                                         return false;
                                     } else {
-                                        alert("Please Input Scaled Node/Edge Size!");
+                                        alert("Miaow~~~ Please Input Scaled Node/Edge Size!");
                                     }
                                 }
                             </script>
@@ -378,14 +377,14 @@
                 <h2 style="color: #FFFFFF;" class="text-left ">CONTACT</h2>
                 <div class="row ">
                     <div class="col-sm-5 ">
-                        <p>Please Leave your precious comments to help us make GScaler better!</p>
+                        <p>Please leave your precious comments to help us make GScaler better!</p>
                         <p><span class="glyphicon glyphicon-map-marker "></span> School of Computing</p>
                         <p><span class="glyphicon glyphicon-map-marker "></span> National University of Singapore</p>
                         <p><span class="glyphicon glyphicon-map-marker "></span> 13 Computing Drive, Singapore, 117417</p>
                         <p><span class="glyphicon glyphicon-envelope "></span> a0054808@u.nus.edu</p>
                     </div>
                     <div class="col-sm-7">
-                        <form id="contactForm" action="SendMail.jsp"
+                        <form id="contactForm" action="SendEmail"
                               target="rfFrame">
                             <div class="row ">
                                 <div class="col-sm-6 form-group ">
@@ -408,13 +407,18 @@
                         </form>
                         <script>
                             function submitContactForm() {
-                                // Get the first form with the name
-                                // Hopefully there is only one, but there are more, select the correct index
-                                var frm = document.getElementById("contactForm");
-                                alert("Thanks for your precious comments!");
-                                frm.submit(); // Submit
-                                frm.reset();  // Reset
-                                return false; // Prevent page refresh
+                                var email = document.getElementById('email').value;
+                                var comments = document.getElementById('comments').value;
+                                if (email !== null && /\S/.test(email)
+                                    && comments !== null && /\S/.test(comments)) {
+                                        alert("Thanks for your precious comments!");
+                                        var frm = document.getElementById('contactForm');
+                                        frm.submit();
+                                        frm.reset();
+                                        return false;
+                                }else{
+                                    alert("Miaow~~~ Please fill the contact form!");
+                                }
                             }
                         </script>
                     </div>
@@ -425,7 +429,7 @@
                 $(function () {
                     var isUploaded = <%=isUploaded%>;
                     var isScaled = <%=isScaled%>
-                    console.log(isUploaded);
+                    
                     if (isUploaded === true) {
                         $('#scaleBtn').attr('onclick', 'submitScaleForm()');
                     }
