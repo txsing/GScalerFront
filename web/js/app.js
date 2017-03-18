@@ -434,10 +434,10 @@ function testTry() {
     for (var i = 0; i < links.length; i++) {
         var edge = links[i];
         if (edge['left']) {
-            result += edge["target"]["id"] + "\t" + edge["source"]["id"] + "\n";
+            result += edge["target"]["id"] + "\t" + edge["source"]["id"] + "\r\n";
         }
         if (edge['right']) {
-            result += edge["source"]["id"] + "\t" + edge["target"]["id"] + "\n";
+            result += edge["source"]["id"] + "\t" + edge["target"]["id"] + "\r\n";
         }
     }
     document.getElementById("main").innerHTML = result;

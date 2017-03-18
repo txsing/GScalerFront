@@ -79,7 +79,7 @@ public class InOutDegreeDisCal {
             List<String> result = new ArrayList<String>();
 
             for (int i = 0; i <= maxDegree; i++) {
-                String dataString = "[" + i + ", ";
+                String dataString = "['" + i + "', ";
 
                 String in_portion = rawDegreeDis.containsKey(i)
                         ? rawDegreeDis.get(i) / (double) rawNodeSize + "" : "0";

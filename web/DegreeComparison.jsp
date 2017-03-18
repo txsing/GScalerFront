@@ -36,14 +36,14 @@
 
     function drawChart() {
       var data = new google.visualization.DataTable();
-      data.addColumn('number', 'In Degree');
+      data.addColumn('string', 'In Degree');
       data.addColumn('number', 'raw graph');
       data.addColumn('number', 'scaled graph');
 
       data.addRows(<%=inDegreePlotString%>);
 
       var data1 = new google.visualization.DataTable();
-      data1.addColumn('number', 'Out Degree');
+      data1.addColumn('string', 'Out Degree');
       data1.addColumn('number', 'raw graph');
       data1.addColumn('number', 'scaled graph');
 

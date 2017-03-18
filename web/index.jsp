@@ -19,6 +19,7 @@
         <link href="fileinput/css/fileinput.css" media="all" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="css/base.css">
         <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/FileSaver.js" type="text/javascript"></script>
         <script src="fileinput/js/fileinput.js" type="text/javascript"></script>
         <script src="bootstrap-3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     </head>
@@ -82,7 +83,7 @@
                             (e.g. for application development/system scalability test and so on). 
                         </h4><br>
                         <p>
-                            Gscaler is the tool designed for such scaling, developed by Jiangwei Zhang from National University of Singapore, School of Computing.<br> Related demo paper is accepted by VLDB 2017:
+                            Gscaler is the tool designed for such scaling, developed by students from National University of Singapore, School of Computing.<br> Related demo paper is accepted by VLDB 2017:
                             <a href="https://drive.google.com/file/d/0B8OtlmDMlRZnUllSTThPWm9kRm8/view?usp=sharing" target="_blank">
                                 GscalerCloud: A Web-Based Graph Scaling Service
                             </a><br> Research paper is published in EDBT 2016:
@@ -124,13 +125,13 @@
                             <li>The graph is <strong>DIRECTED</strong>, bidirectional arrow can not be used to represent
                                 undirected relation.</li>
                             <br>
-                            <li>Click in the open space to add a node, Ctrl-drag a node to move to adjust graph layout.</li>
+                            <li>Click in the open space to add a node, <strong>Ctrl-Drag</strong> a node to move to adjust graph layout.</li>
                             <br>
                             <li>When a node is selected: press <strong>'Ctrl-Del'</strong> to remove it.</li>
                             <br>
                             <li>When an edge is selected: press <strong>'Ctrl-L'</strong>(eft), <strong>'Ctrl-R'</strong>(ight) to change direction, press <strong>'Ctrl-Del'</strong> removes the edge.</li>
                             <br>
-                            <li>Download the graph your drew as text file and then upload the file for scaling.</li>
+                            <li>Click Download button to download the graph your drew as text file.</li>
                             <br>
                             <li>You can also directly upload your own graph file without drawing one, just follow the file iformat instructions given in 
                                 <strong>UPLOAD</strong> session.</li>
@@ -155,10 +156,24 @@
                                         link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
                                         link.click();
                                     }
-                                </script>                            
+                                </script>
                             </div>
                             <div class="col-md-7" align="left">
-                                <a style="padding: 8px 16px;" class="btn btndow btn-lg" href="#uploadAndScale">Upload &amp; Scale Graph</a>
+                                <form id="autoUploadForm" action="AutoUpload.jsp" method="post" style="display: none">
+                                    <input id="GraphString" name="graphString" type="text">
+                                </form>
+                                <button style="padding: 8px 16px;" class="btn btndow btn-lg" id="uploadlink" onclick="autoUploadGrpahFile()">
+                                    Upload &amp; Scale Graph
+                                </button>
+                                <script>
+                                    function autoUploadGrpahFile() {
+                                        testTry();
+                                        var elHtml = document.getElementById("main").innerHTML;
+                                        console.log(elHtml);
+                                        document.getElementById("GraphString").value = elHtml;
+                                        document.getElementById("autoUploadForm").submit();
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>
