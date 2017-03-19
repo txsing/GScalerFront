@@ -26,7 +26,7 @@
 
     <!-- body -->
     <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-        <!-- Container (Whole Page) -->
+        <!-- Container (Root) -->
         <div style="padding: 0px" class="container">
             <!-- Top -->
             <div class="top">
@@ -147,7 +147,6 @@
                                         testTry();
                                         loadInnerHtml('edgelist.txt', 'main', 'text/html');
                                     }
-
                                     function loadInnerHtml(filename, elId, mimeType) {
                                         var elHtml = document.getElementById(elId).innerHTML;
                                         var link = document.createElement('a');
@@ -169,8 +168,8 @@
                                     function autoUploadGrpahFile() {
                                         testTry();
                                         var elHtml = document.getElementById("main").innerHTML;
-                                        console.log(elHtml);
-                                        document.getElementById("GraphString").value = elHtml;
+                                        var encodedGraphString = encodeURIComponent(elHtml)
+                                        document.getElementById("GraphString").value = encodedGraphString;
                                         document.getElementById("autoUploadForm").submit();
                                     }
                                 </script>
@@ -425,13 +424,13 @@
                                 var email = document.getElementById('email').value;
                                 var comments = document.getElementById('comments').value;
                                 if (email !== null && /\S/.test(email)
-                                    && comments !== null && /\S/.test(comments)) {
-                                        alert("Thanks for your precious comments!");
-                                        var frm = document.getElementById('contactForm');
-                                        frm.submit();
-                                        frm.reset();
-                                        return false;
-                                }else{
+                                        && comments !== null && /\S/.test(comments)) {
+                                    alert("Thanks for your precious comments!");
+                                    var frm = document.getElementById('contactForm');
+                                    frm.submit();
+                                    frm.reset();
+                                    return false;
+                                } else {
                                     alert("Miaow~~~ Please fill the contact form!");
                                 }
                             }
@@ -440,11 +439,12 @@
                 </div>
             </div>
 
+            <!-- Faulty Operations Prevention -->
             <script>
                 $(function () {
                     var isUploaded = <%=isUploaded%>;
                     var isScaled = <%=isScaled%>
-                    
+
                     if (isUploaded === true) {
                         $('#scaleBtn').attr('onclick', 'submitScaleForm()');
                     }

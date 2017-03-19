@@ -23,13 +23,13 @@
     ServletFileUpload upload = new ServletFileUpload(factory);
     // maximum file size to be uploaded.
     upload.setSizeMax(maxFileSize);
-    String graphString = request.getParameter("graphString");
+    String graphString = java.net.URLDecoder.decode(request.getParameter("graphString"), "UTF-8");
     String uploadedFileName = "auto_edgelist.txt";
-    byte bt[] = graphString.getBytes();
+    byte[] bt = graphString.getBytes();
     try {
         file = new File(uploadDir.concat(uploadedFileName));
         FileOutputStream in = new FileOutputStream(file);
-        in.write(bt,0,bt.length);
+        in.write(bt );
         in.close();
         session.setAttribute("uploadDir", uploadDir);
         session.setAttribute("uploadedFilePath", uploadDir.concat(uploadedFileName));

@@ -448,7 +448,6 @@ function writeToFile(res) {
     var fh = fso.OpenTextFile("C:/u/data.txt", 8, false, 0);
     for (var i = 0; i < res.length; i++) {
         fh.WriteLine(res[i]);
-
     }
     fh.Close();
 }
