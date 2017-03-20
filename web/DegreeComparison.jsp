@@ -62,8 +62,7 @@
                 var low = document.getElementById(inOrOut.concat('Low')).value;
                 var high = document.getElementById(inOrOut.concat('High')).value;
                 if(inOrOut === 'In'){
-                    replotdata = truncateAxe(rawinplotdata, low, high);
-                    console.log(replotdata);
+                    replotdata = truncateAxe(rawinplotdata, low, high);                   
                 }else{
                     replotdata = truncateAxe(rawoutplotdata, low, high);
                 }
@@ -72,10 +71,9 @@
                 
             function truncateAxe(rawdata, low, high){
                 var replotdata;
-                console.log(low);
-                console.log(high);
-                console.log(rawdata.length);
-                if (low < high && low >= 0 && high <= rawdata.length){
+                if (low < high && low >= 0){
+                    if(high > rawdata.length)
+                        high = rawdata.length;
                     replotdata = rawdata.slice(low, high+1);
                     return replotdata;
                 } else{
@@ -87,10 +85,26 @@
     </head>
     <body>
         <div class="chartdiv" id="In" style="width: 900px; height: 500px"></div>
-        <input id="InLow" name="name" type="number" required>
-        <input id="InHigh" name="name" type="number" required>
-        <button onclick="replot('In')">Replot</button>
         <br>
+        <div>
+            <label>DEGREE RANGE: </label>
+            <input style="text-align:center" id="InLow" name="name" 
+                   placeholder="Lower bound" type="number" required>
+            <input style="text-align:center" id="InHigh" name="name" 
+                   placeholder="Upper bound" type="number" required>
+            <button onclick="replot('In')">REPLOT</button>
+        </div>
+        <br><br>
         <div class="chartdiv" id="Out" style="width: 900px; height: 500px"></div>
+        <br>
+        <div>
+            <label>DEGREE RANGE: </label>
+            <input style="text-align:center" id="OutLow" name="name" 
+                   placeholder="Lower bound" type="number" required>
+            <input style="text-align:center" id="OutHigh" name="name" 
+                   placeholder="Upper bound" type="number" required>
+            <button onclick="replot('Out')">REPLOT</button>
+        </div>
+        <br><br><br>
     </body>
 </html>
