@@ -29,7 +29,6 @@ public class EdgeListConvertor {
                             String edge = String.valueOf(i)
                                     .concat(" ")
                                     .concat(String.valueOf(j));
-                            System.out.println(edge);
                             result = result.concat(edge.concat("\r\n"));
                         }
                     }
@@ -41,7 +40,7 @@ public class EdgeListConvertor {
                 }
 
             } catch (Exception e) {
-                System.err.println("LOG(EXP) GetEdgeFile: ".concat(e.getMessage()));
+                System.err.println("EXP(GetEdgeFile): ".concat(e.getMessage()));
             }
         }
 
@@ -65,6 +64,7 @@ public class EdgeListConvertor {
                 return false;
             }
 
+            //try read the 2nd and 3rd line.
             while ((line = br.readLine()) != null) {
                 if (count >= 2) {
                     return true;
@@ -85,7 +85,7 @@ public class EdgeListConvertor {
                     && Integer.parseInt(line1Nodes[1]) <= 1
                     && Integer.parseInt(line2Nodes[0]) <= 1);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("EXP(IsEdgeList): ".concat(e.getMessage()));
             return false;
         }
     }

@@ -137,7 +137,7 @@
                     elements: {
                         nodes: nodejson,
                         edges: edgejson
-                    },
+                    }
                 });
 
             });

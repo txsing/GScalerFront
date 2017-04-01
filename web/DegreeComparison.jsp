@@ -75,7 +75,6 @@
                     if(high > rawdata.length){
                         high = rawdata.length;
                     } 
-                    //console.log(high + 1)
                     replotdata = rawdata.slice(low, high + 1);
                     return replotdata;
                 } else{

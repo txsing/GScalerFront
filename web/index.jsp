@@ -129,9 +129,11 @@
                             <br>
                             <li>When a node is selected: press <strong>'Ctrl-Del'</strong> to remove it.</li>
                             <br>
-                            <li>When an edge is selected: press <strong>'Ctrl-L'</strong>(eft), <strong>'Ctrl-R'</strong>(ight) to change direction, press <strong>'Ctrl-Del'</strong> removes the edge.</li>
+                            <li>When an edge is selected: 
+                                press <strong>'Ctrl-L'</strong>(eft), <strong>'Ctrl-R'</strong>(ight) to change its direction, 
+                                press <strong>'Ctrl-Del'</strong> to remove the edge.</li>
                             <br>
-                            <li>Click Download button to download the graph your drew as text file if needed.</li>
+                            <li>If need be, click <strong>Download</strong> button to download the graph your drew as text file.</li>
                             <br>
                             <li>You can also directly upload your own graph file without drawing one, just follow the file format instructions given in 
                                 <strong>UPLOAD</strong> session.</li>
@@ -139,25 +141,6 @@
                         <br>
                         <div class="row">
                             <div class="col-md-5">
-                                <button style="padding: 8px 16px;" class="btn btndow btn-lg" id="downloadLink" onclick="downloadGraphFile()">
-                                    Download Graph
-                                </button>
-                                <script>
-                                    function downloadGraphFile() {
-                                        testTry();
-                                        loadInnerHtml('edgelist.txt', 'main', 'text/html');
-                                    }
-                                    function loadInnerHtml(filename, elId, mimeType) {
-                                        var elHtml = document.getElementById(elId).innerHTML;
-                                        var link = document.createElement('a');
-                                        mimeType = mimeType || 'text/plain';
-                                        link.setAttribute('download', filename);
-                                        link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
-                                        link.click();
-                                    }
-                                </script>
-                            </div>
-                            <div class="col-md-7" align="left">
                                 <form id="autoUploadForm" action="AutoUpload.jsp" method="post" style="display: none">
                                     <input id="GraphString" name="graphString" type="text">
                                 </form>
@@ -171,6 +154,26 @@
                                         var encodedGraphString = encodeURIComponent(elHtml)
                                         document.getElementById("GraphString").value = encodedGraphString;
                                         document.getElementById("autoUploadForm").submit();
+                                    }
+                                </script>
+
+                            </div>
+                            <div class="col-md-7" align="center">
+                                <button style="padding: 8px 16px;" class="btn btndow btn-lg" id="downloadLink" onclick="downloadGraphFile()">
+                                    Download Your Graph
+                                </button>
+                                <script>
+                                    function downloadGraphFile() {
+                                        testTry();
+                                        loadInnerHtml('edgelist.txt', 'main', 'text/html');
+                                    }
+                                    function loadInnerHtml(filename, elId, mimeType) {
+                                        var elHtml = document.getElementById(elId).innerHTML;
+                                        var link = document.createElement('a');
+                                        mimeType = mimeType || 'text/plain';
+                                        link.setAttribute('download', filename);
+                                        link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+                                        link.click();
                                     }
                                 </script>
                             </div>
@@ -272,7 +275,7 @@
                     <div class="col-sm-5 text-left">
                         <h2>FORMAT INSTRUCTIONS</h2>
                         <ol class="notes">
-                            <li>Only <b>TEXT</b> files are supported, we recommend <strong>Edge List</strong> file.</li>
+                            <li>We recommend <strong>Edge List</strong> as graph representing form.</li>
                             <br>
                             <li>The format of each line in Edge List file: <br><strong>[number1][space][number2]</strong></li>
                             <br>
@@ -280,8 +283,8 @@
                                 represents an edge pointing from vertex 1 to vertex 2 
                                 (noted that the graph is <strong>DIRECTED</strong>).</li>
                             <br>
-                            <li>The format of <strong>Adjacent Matrix</strong> is also supported, 
-                                where "1" presents an edge. (diagonal entries must be "0")</li>
+                            <li>The graph form of <strong>Adjacent Matrix</strong> is also supported, 
+                                where "1" presents an edge (diagonal entries must be "0").</li>
                         </ol>
                     </div>
                 </div>

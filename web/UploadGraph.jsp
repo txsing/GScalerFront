@@ -11,7 +11,7 @@
     File file;
     int maxFileSize = 50000 * 1024;
     int maxMemSize = 50000 * 1024;
-    String timestamp = System.currentTimeMillis() + "";
+    String timestamp = String.valueOf(System.currentTimeMillis());
     String rootpath = request.getServletContext().getRealPath("");
     String uploadDir = rootpath + File.separator + "uploadedfiles" + File.separator + timestamp + File.separator;   
     new File(uploadDir).mkdir();
@@ -45,6 +45,8 @@
             }
             session.setAttribute("uploadDir", uploadDir);
             session.setAttribute("uploadedFilePath", uploadDir.concat(uploadedFileName));
+            session.setAttribute("scaledNodeSize", null);
+            session.setAttribute("scaledEdgeSize", null);
             response.setStatus(response.SC_MOVED_TEMPORARILY);
             response.setHeader("Location", "index.jsp#uploadAndScale");
         } catch (Exception ex) {
