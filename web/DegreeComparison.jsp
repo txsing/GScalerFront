@@ -55,14 +55,14 @@
                 };
                 var chart = new google.charts.Line(document.getElementById(inOrOut));
                 chart.draw(data, options);
-            
             }
+            
             function replot(inOrOut){
                 var replotdata;
-                var low = document.getElementById(inOrOut.concat('Low')).value;
-                var high = document.getElementById(inOrOut.concat('High')).value;
+                var low = Number(document.getElementById(inOrOut.concat('Low')).value);
+                var high = Number(document.getElementById(inOrOut.concat('High')).value);
                 if(inOrOut === 'In'){
-                    replotdata = truncateAxe(rawinplotdata, low, high);                   
+                    replotdata = truncateAxe(rawinplotdata, low, high);  
                 }else{
                     replotdata = truncateAxe(rawoutplotdata, low, high);
                 }
@@ -72,14 +72,15 @@
             function truncateAxe(rawdata, low, high){
                 var replotdata;
                 if (low < high && low >= 0){
-                    if(high > rawdata.length)
+                    if(high > rawdata.length){
                         high = rawdata.length;
-                    replotdata = rawdata.slice(low, high+1);
+                    } 
+                    //console.log(high + 1)
+                    replotdata = rawdata.slice(low, high + 1);
                     return replotdata;
                 } else{
                     alert("Wrong Input!");
                 }
-
             }
         </script>
     </head>

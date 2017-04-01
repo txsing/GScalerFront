@@ -5,6 +5,7 @@
 <%@ page import="org.apache.commons.fileupload.servlet.*" %>
 <%@ page import="org.apache.commons.io.output.*" %>
 <%@page import="paperalgorithm.*" %>
+<%@page import="backtofront.EdgeListConvertor" %>
 
 <%
     File file;
@@ -39,6 +40,7 @@
                     // Write the file
                     file = new File(uploadDir.concat(uploadedFileName));
                     fi.write(file);
+                    EdgeListConvertor.getEdgeListFile(file);
                 }
             }
             session.setAttribute("uploadDir", uploadDir);

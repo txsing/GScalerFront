@@ -131,9 +131,9 @@
                             <br>
                             <li>When an edge is selected: press <strong>'Ctrl-L'</strong>(eft), <strong>'Ctrl-R'</strong>(ight) to change direction, press <strong>'Ctrl-Del'</strong> removes the edge.</li>
                             <br>
-                            <li>Click Download button to download the graph your drew as text file.</li>
+                            <li>Click Download button to download the graph your drew as text file if needed.</li>
                             <br>
-                            <li>You can also directly upload your own graph file without drawing one, just follow the file iformat instructions given in 
+                            <li>You can also directly upload your own graph file without drawing one, just follow the file format instructions given in 
                                 <strong>UPLOAD</strong> session.</li>
                         </ol>
                         <br>
@@ -272,15 +272,16 @@
                     <div class="col-sm-5 text-left">
                         <h2>FORMAT INSTRUCTIONS</h2>
                         <ol class="notes">
-                            <li>Only <b>TEXT</b> files are supported, we recommend '.txt' file.</li>
+                            <li>Only <b>TEXT</b> files are supported, we recommend <strong>Edge List</strong> file.</li>
                             <br>
-                            <li>The format of each line: <strong>[number1][whitespace][number2]</strong></li>
+                            <li>The format of each line in Edge List file: <br><strong>[number1][space][number2]</strong></li>
                             <br>
                             <li>For example, <strong>"1&nbsp;&nbsp;&nbsp;&nbsp;2"</strong> 
-                                represents an edge point from vertex 1 to vertex 2 (noted that the graph is 
-                                <strong>DIRECTED</strong>).</li>
+                                represents an edge pointing from vertex 1 to vertex 2 
+                                (noted that the graph is <strong>DIRECTED</strong>).</li>
                             <br>
-                            <li>Please <strong>UPLOAD FIRST</strong> and <strong>SCALE AFTER</strong>.</li>
+                            <li>The format of <strong>Adjacent Matrix</strong> is also supported, 
+                                where "1" presents an edge. (diagonal entries must be "0")</li>
                         </ol>
                     </div>
                 </div>
