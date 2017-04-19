@@ -160,7 +160,7 @@
 
                                         document.getElementById("GraphString").value = encodedGraphString;
                                         document.getElementById("autoUploadForm").submit();
-                                        init();
+                                        resetDrawArea();
                                         alert("Graph successfully uploaded!");
                                         setTimeout('getSize(false)', 600);
                                                                        
@@ -423,6 +423,10 @@
 
             <!-- Faulty Operations Prevention -->
             <script>
+                function largeGraphError(){
+                    alert("Miaow~~~ The graph is too big to visualize!");
+                }
+                
                 function validation() {
                     var isUploaded = document.getElementById("isUploaded").value;
                     var isScaled = document.getElementById("isScaled").value;
@@ -437,8 +441,15 @@
                         var nsizeParaString = "?onsize=" + document.getElementById("onsize").innerHTML
                                 + "&snsize=" + document.getElementById("snsize").innerHTML;
 
-                        var gvizUrl = "GraphViz.jsp" + nsizeParaString;
-                        $('#gViz').attr('href', gvizUrl);
+                        
+                        if(Number(document.getElementById("snsize").innerHTML) >= 50
+                                || Number(document.getElementById("snsize").innerHTML) >= 50){
+                            $('#gViz').attr('onclick', 'largeGraphError()');                        
+                        }else{
+                             var gvizUrl = "GraphViz.jsp" + nsizeParaString;
+                            $('#gViz').attr('href', gvizUrl);
+                        }
+                        
 
                         var dcmpUrl = "DegreeComparison.jsp" + nsizeParaString;
                         $('#dCmp').attr("href", dcmpUrl);

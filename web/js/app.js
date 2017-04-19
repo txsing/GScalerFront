@@ -27,7 +27,7 @@ var height = width * 0.618;
  ];
  */
 
-var nodes = [{id: 0, reflexive: false}, {id: 1, reflexive: false }],
+var nodes = [{id: 0, reflexive: false}, {id: 1, reflexive: false}],
         lastNodeId = 1,
         links = [];
 //document.getElementById("edgelists").innerHTML = "tsads";
@@ -118,7 +118,7 @@ function tick() {
         return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
     });
 
-    circle.attr('transform', function (d) {        
+    circle.attr('transform', function (d) {
         return 'translate(' + d.x + ',' + d.y + ')';
     });
 }
@@ -419,7 +419,6 @@ function keydown() {
 
 function keyup() {
     lastKeyDown = -1;
-
     // ctrl
     if (d3.event.keyCode === 17) {
         circle
@@ -427,6 +426,18 @@ function keyup() {
                 .on('touchstart.drag', null);
         svg.classed('ctrl', false);
     }
+}
+
+function resetDrawArea() {
+    var nodeslen = nodes.length;
+    for (var i = nodeslen - 1; i > 1; i--) {
+        var node = nodes[i];
+        nodes.splice(i, 1);
+        spliceLinksForNode(node);
+    }
+    spliceLinksForNode(nodes[1]);
+    restart();
+    lastNodeId = 1;
 }
 
 function testTry() {
@@ -452,17 +463,7 @@ function writeToFile(res) {
     fh.Close();
 }
 
-function init(){
-    var nodeslen = nodes.length;
-    for(var i = nodeslen - 1; i > 1; i--){
-        var node = nodes[i];
-        nodes.splice(i,1);
-        spliceLinksForNode(node);               
-    }
-    spliceLinksForNode(nodes[1]);
-    restart();
-    lastNodeId = 1;
-}
+
 // app starts here
 svg.on('mousedown', mousedown)
         .on('mousemove', mousemove)
