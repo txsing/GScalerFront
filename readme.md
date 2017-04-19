@@ -5,4 +5,5 @@ Enterprises and researchers often have datasets that can be represented as graph
 Gscaler is the tool designed for such scaling, underlying algorithms are developed by students from National University of Singapore, School of Computing.
 
 [GScaler Algorithm](http://www.comp.nus.edu.sg/~upsizer/gscaler.pdf)
+
 [GScalerCloud Website](http://scaler.d2.comp.nus.edu.sg/GScalerFront/)
