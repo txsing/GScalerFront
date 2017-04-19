@@ -9,9 +9,9 @@
 <%
     String scaledFilePath = session.getAttribute("uploadDir").toString().concat("scaled.txt");
     String oriFilePath = session.getAttribute("uploadedFilePath").toString();
-
-    int scaledNodeSize = Integer.parseInt(session.getAttribute("scaledNodeSize").toString());
-    int oriNodeSize = Integer.parseInt(session.getAttribute("originalnode").toString());
+   
+    int scaledNodeSize = Integer.parseInt(request.getParameter("snsize").toString());
+    int oriNodeSize = Integer.parseInt(request.getParameter("onsize").toString());
 
     String outDegreePlotString = InOutDegreeDisCal.computeInOutDegreeDistribution(oriFilePath, scaledFilePath,
             oriNodeSize, scaledNodeSize, 0);
@@ -29,7 +29,7 @@
         </style>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
-            google.charts.load('current', {'packages':['line']});
+            google.charts.load('current', {packages: ['corechart', 'line']});
             google.charts.setOnLoadCallback(init);
             var rawinplotdata = <%=inDegreePlotString%>;
             var rawoutplotdata = <%=outDegreePlotString%>;
@@ -40,20 +40,23 @@
             
             function drawChart(plotdata, inOrOut) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('string', inOrOut.concat(' Degree'));
-            
+                data.addColumn('string', inOrOut.concat(' Degree'));           
                 data.addColumn('number', 'raw graph');
                 data.addColumn('number', 'scaled graph');
+                
                 data.addRows(plotdata);
             
                 var options = {
-                    chart: {
-                        title: inOrOut.concat('Degree Distribution')
+                    title: inOrOut.concat('-Degree Distribution'),
+                    vAxis:{
+                         viewWindow: {                           
+                             min: 0
+                         }
                         },
                     width: 900,
                     height: 500
                 };
-                var chart = new google.charts.Line(document.getElementById(inOrOut));
+                var chart =  new google.visualization.LineChart(document.getElementById(inOrOut));
                 chart.draw(data, options);
             }
             

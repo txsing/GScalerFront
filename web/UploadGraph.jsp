@@ -45,10 +45,8 @@
             }
             session.setAttribute("uploadDir", uploadDir);
             session.setAttribute("uploadedFilePath", uploadDir.concat(uploadedFileName));
-            session.setAttribute("scaledNodeSize", null);
-            session.setAttribute("scaledEdgeSize", null);
-            response.setStatus(response.SC_MOVED_TEMPORARILY);
-            response.setHeader("Location", "index.jsp#uploadAndScale");
+//            response.setStatus(response.SC_MOVED_TEMPORARILY);
+//            response.setHeader("Location", "index.jsp#uploadAndScale");
         } catch (Exception ex) {
             System.err.println("EXP(UploadGraph): ".concat(ex.getMessage()));
         }

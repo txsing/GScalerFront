@@ -452,6 +452,17 @@ function writeToFile(res) {
     fh.Close();
 }
 
+function init(){
+    var nodeslen = nodes.length;
+    for(var i = nodeslen - 1; i > 1; i--){
+        var node = nodes[i];
+        nodes.splice(i,1);
+        spliceLinksForNode(node);               
+    }
+    spliceLinksForNode(nodes[1]);
+    restart();
+    lastNodeId = 1;
+}
 // app starts here
 svg.on('mousedown', mousedown)
         .on('mousemove', mousemove)

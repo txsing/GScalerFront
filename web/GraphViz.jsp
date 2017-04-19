@@ -4,13 +4,12 @@
 <!DOCTYPE>
 <%
     String rawFilePath = session.getAttribute("uploadedFilePath").toString();
-    int rawNodeSize = Integer.parseInt(session.getAttribute("originalnode").toString());
+    int scaledNodeSize = Integer.parseInt(request.getParameter("snsize").toString());
+    int rawNodeSize = Integer.parseInt(request.getParameter("onsize").toString());
     String[] rawNEJson = BasicStatisticCal.getGraphVizJson(rawFilePath, rawNodeSize);
     
     String scaledFilePath = session.getAttribute("uploadDir").toString().concat("scaled.txt");
-    int scaledNodeSize = Integer.parseInt(session.getAttribute("scaledNodeSize").toString());
-    String[] scaledNEJson = BasicStatisticCal.getGraphVizJson(scaledFilePath, scaledNodeSize);
-    
+    String[] scaledNEJson = BasicStatisticCal.getGraphVizJson(scaledFilePath, scaledNodeSize);  
 %>
 <html>
 
@@ -19,14 +18,14 @@
 
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
         <link rel="nus icon" type="image/vnd.microsoft.icon" href="favicon.ico"/>
-        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-        <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/cytoscape.min.js"></script>
 
         <!-- for testing with local version of cytoscape.js -->
         <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
 
-        <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
-        <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js"></script>
+        <script src="js/dagre.min.js"></script>
+        <script src="js/cytoscape-dagre.js"></script>
 
         <style>
             body {
@@ -53,6 +52,7 @@
         <script>
             $(function () {
                 var nodejson = <%=rawNEJson[0]%>;
+                console.log(nodejson);
                 var edgejson = <%=rawNEJson[1]%>;
                 var cy = window.cy = cytoscape({
                     container: document.getElementById('cy'),

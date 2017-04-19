@@ -22,11 +22,14 @@
         <script src="js/FileSaver.js" type="text/javascript"></script>
         <script src="fileinput/js/fileinput.js" type="text/javascript"></script>
         <script src="bootstrap-3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="js/gscaler-ajax-logic.js" type="text/javascript"></script>
     </head>
 
     <!-- body -->
     <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
         <!-- Container (Root) -->
+        <input id="isUploaded" style="display: none">
+        <input id="isScaled" style="display: none">
         <div style="padding: 0px" class="container">
             <!-- Top -->
             <div class="top">
@@ -87,7 +90,7 @@
                             <a href="https://drive.google.com/file/d/0B8OtlmDMlRZnUllSTThPWm9kRm8/view?usp=sharing" target="_blank">
                                 GscalerCloud: A Web-Based Graph Scaling Service
                             </a><br> Research paper is published in EDBT 2016:
-                            <a href="https://openproceedings.org/2016/conf/edbt/paper-68.pdf" target="_blank">
+                            <a href="http://www.comp.nus.edu.sg/~upsizer/gscaler.pdf" target="_blank">
                                 GSCALER: Synthetically Scaling A Given Graph
                             </a>
 
@@ -141,9 +144,11 @@
                         <br>
                         <div class="row">
                             <div class="col-md-5">
-                                <form id="autoUploadForm" action="AutoUpload.jsp" method="post" style="display: none">
+                                <!-- Upload Drawn Graph Form -->
+                                <form id="autoUploadForm" action="AutoUpload.jsp" target="autoUploadiFrame" method="post" style="display: none">
                                     <input id="GraphString" name="graphString" type="text">
                                 </form>
+                                <iframe name="autoUploadiFrame" src="about:blank" style="display:none;"></iframe> 
                                 <button style="padding: 8px 16px;" class="btn btndow btn-lg" id="uploadlink" onclick="autoUploadGrpahFile()">
                                     Upload &amp; Scale Graph
                                 </button>
@@ -152,11 +157,16 @@
                                         testTry();
                                         var elHtml = document.getElementById("main").innerHTML;
                                         var encodedGraphString = encodeURIComponent(elHtml)
+
                                         document.getElementById("GraphString").value = encodedGraphString;
                                         document.getElementById("autoUploadForm").submit();
+                                        init();
+                                        alert("Graph successfully uploaded!");
+                                        setTimeout('getSize(false)', 600);
+                                                                       
+                                        return false;
                                     }
                                 </script>
-
                             </div>
                             <div class="col-md-7" align="center">
                                 <button style="padding: 8px 16px;" class="btn btndow btn-lg" id="downloadLink" onclick="downloadGraphFile()">
@@ -182,62 +192,38 @@
                 </div>
             </div>
 
-            <!-- (Java Code) Raw Graph Analysis -->
-            <%
-                Boolean isUploaded = false;
-                String uploadedFilePath = "";
-                String uploadDir = "";
-
-                String edge = "N/A";
-                String node = "N/A";
-
-                String avpl_ori = "N/A";
-                String dia_ori = "N/A";
-
-                String coc_ori = "N/A";
-                try {
-                    uploadedFilePath = session.getAttribute("uploadedFilePath").toString();//gets the path of the file which was uploaded
-                    if (!(uploadedFilePath == null || uploadedFilePath.equals(""))) {
-                        int[] rawGNandEsize = NodeEdgeSizeCal.getNodeAndEdgeSize(uploadedFilePath);
-                        if (rawGNandEsize != null) {
-                            node = Integer.toString(rawGNandEsize[0]);
-                            edge = Integer.toString(rawGNandEsize[1]);
-                        }
-
-                        session.setAttribute("originalnode", node);
-                        session.setAttribute("originaledge", edge);
-
-                        uploadDir = session.getAttribute("uploadDir").toString();
-                        String oriFilPath = uploadDir.concat("ori.txt");
-
-                        String[] rawAvplAndDia = BasicStatisticCal
-                                .getEffectiveDiaAndAvgShortestPathLen(uploadedFilePath, oriFilPath);
-
-                        avpl_ori = rawAvplAndDia[0];
-                        dia_ori = rawAvplAndDia[1];
-
-                        coc_ori = BasicStatisticCal.getAvgClusteringCof(uploadedFilePath, oriFilPath, uploadDir);
-                        isUploaded = true;
-                    }
-                } catch (Exception e) {
-                    System.err.println("EXP(rawAnls): " + e.getMessage());
-                    System.err.println(e.getStackTrace()[0]);
-                }
-            %> 
-
             <!-- Container (File Upload & Scale Section) -->
             <div id="uploadAndScale" class="container-fluid">
                 <div class="row ">
                     <div class="col-sm-7 ">
                         <h2>Upload &amp; Scale Graph</h2>
-                        <form action="UploadGraph.jsp" method="post"                         
-                              enctype="multipart/form-data">
-                            <input id="input-1a" type="file" name="file" class="file" data-show-preview="false">                       
+                        <!-- Upload Graph File Form -->
+                        <form id="uploadForm" action="UploadGraph.jsp" target="uploadiFrame" method="post"                         
+                              onsubmit="uploading(true)" enctype="multipart/form-data">
+                            <input id="input-1a" type="file" name="file" class="file" data-show-preview="false"> 
+                            <span id="uptxt" style="display: none">UPLOADING......</span></p>
                         </form>
-                        <br>
-                        <form id="scaleForm" action="ScaleGraph.jsp" metho="post">
-                            <span>Node size scale from &nbsp;&nbsp;<%=node%> &nbsp;&nbsp;to&nbsp;</span>
-                            <input id="nodes" name="scaledNodeSize"
+                        <iframe id="uploadiFrame" name="uploadiFrame" src="about:blank" style="display:none;"></iframe>                       
+                        <script>
+                            $("iframe#uploadiFrame").load(function () {
+                                getSize(false);                             
+                                uploading(false);  
+                                document.getElementById("uploadForm").reset();
+                            });
+                            
+                            function uploading(showloading) {
+                                if (showloading) {
+                                    $("#uptxt").show();
+                                } else {
+                                    $("#uptxt").hide();
+                                }
+                            }
+                        </script>
+                        <br>                     
+                        <!-- Scale Graph Form -->
+                        <form id="scaleForm" action="ScaleGraph.jsp" target="scaleiFrame" metho="post">
+                            <span>Node size scale from &nbsp;&nbsp;<label id="o_nsize">N/A</label> &nbsp;&nbsp;to&nbsp;</span>
+                            <input id="s_nsize" name="scaledNodeSize"
                                    onkeyup="if (this.value.length === 1) {
                                                this.value = this.value.replace(/[^1-9]/g, '')
                                            } else {
@@ -246,8 +232,8 @@
                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'');}"
                                    placeholder=" &nbsp;&nbsp;&nbsp;Input Scaled Node Size"/>
                             <br>
-                            <span>Edge size scale from &nbsp;&nbsp;&nbsp;<%=edge%> &nbsp;&nbsp;to&nbsp;</span>
-                            <input id="edges" name="scaledEdgeSize"
+                            <span>Edge size scale from &nbsp;&nbsp;&nbsp;<label id="o_esize">N/A</label> &nbsp;&nbsp;to&nbsp;</span>
+                            <input id="s_esize" name="scaledEdgeSize"
                                    onkeyup="if (this.value.length === 1) {
                                                this.value = this.value.replace(/[^1-9]/g, '')
                                            } else {
@@ -257,20 +243,32 @@
                                    placeholder=" &nbsp;&nbsp;&nbsp;Input Scaled Edge Size">
                             <br><br>
                             <a id="scaleBtn" style="padding: 8px 16px;" class="btn btndow btn-lg">Scale It Now</a>
-                            <script>
-                                function submitScaleForm() {
-                                    var nodesize = document.getElementById('nodes').value;
-                                    var edgesize = document.getElementById('edges').value;
-                                    if (nodesize !== null && nodesize !== ""
-                                            && edgesize !== null && edgesize !== "") {
-                                        document.getElementById('scaleForm').submit();
-                                        return false;
-                                    } else {
-                                        alert("Miaow~~~ Please Input Scaled Node/Edge Size!");
-                                    }
-                                }
-                            </script>
                         </form>
+                        <iframe id="sacleiFrame" name="scaleiFrame" src="about:blank" style="display:none;"></iframe>
+                        <script>
+                            function submitScaleForm() {
+                                var nodesize = document.getElementById('s_nsize').value;
+                                var edgesize = document.getElementById('s_esize').value;
+
+                                if (nodesize !== null && nodesize !== ""
+                                        && edgesize !== null && edgesize !== "") {
+                                    document.getElementById('snsize').innerHTML = nodesize;
+                                    document.getElementById('sesize').innerHTML = edgesize;
+                                    document.getElementById("isScaled").value = true;
+                                        
+                                    var scaleForm = document.getElementById('scaleForm');
+                                    scaleForm.submit();
+                                    alert("Graph successfully scaled!");
+                                    
+                                    scaleForm.reset();
+                                    validation();
+                                    resetSca();                                                                   
+                                    return false;
+                                } else {
+                                    alert("Miaow~~~ Please Input Scaled Node/Edge Size!");
+                                }
+                            }
+                        </script>
                     </div>
                     <div class="col-sm-5 text-left">
                         <h2>FORMAT INSTRUCTIONS</h2>
@@ -290,43 +288,6 @@
                 </div>
             </div>
 
-            <!-- (Java Code) Scaled Graph Analysis -->
-            <%
-                String avpl = "N/A";
-                String coc = "N/A";
-                String dia = "N/A";
-                String scaledNodeSize = "N/A";
-                String scaledEdgeSize = "N/A";
-                Boolean isScaled = false;
-
-                if (isUploaded) {
-                    Object scaledNodeSizeObj = session.getAttribute("scaledNodeSize");
-                    Object scaledEdgeSizeObj = session.getAttribute("scaledEdgeSize");
-                    if (scaledNodeSizeObj != null && scaledEdgeSizeObj != null) {
-
-                        scaledNodeSize = (String) scaledNodeSizeObj;
-                        scaledEdgeSize = (String) scaledEdgeSizeObj;
-                        try {
-                            String scaledFilePath = uploadDir.concat("scaled.txt");
-                            String t2FilePath = uploadDir.concat("t2.txt");
-
-                            String[] avplAndDia = BasicStatisticCal
-                                    .getEffectiveDiaAndAvgShortestPathLen(scaledFilePath, t2FilePath);
-
-                            avpl = avplAndDia[0];
-                            dia = avplAndDia[1];
-
-                            coc = BasicStatisticCal.getAvgClusteringCof(uploadedFilePath, t2FilePath, uploadDir);
-
-                            isScaled = true;
-                        } catch (Exception e) {
-                            System.err.println("EXP(ScaleAnls): " + e.getMessage());
-                            System.err.println(e.getStackTrace()[0]);
-                        }
-                    }
-                }
-            %>
-
             <!-- Container (Analysis Section) -->
             <div id="analysis" class="container-fluid bg-grey ">
                 <div class="row">
@@ -338,33 +299,50 @@
                                     <th></th>
                                     <th>Node No.</th>
                                     <th>Edge No.</th>
-                                    <th>Effective Diameter</th>
-                                    <th>Average Shortest Path</th> 
-                                    <th>Average Clustering Coefficient</th>                                                                                              
+                                    <th>Effective Diameter</th>                                  
+                                    <th>Average Shortest Path</th>                                   
+                                    <th>Average Clustering Coefficient</th>                                   
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <th scope="row">Original</th>
-                                    <td><span> <%=node%> </span></td>
-                                    <td><span> <%=edge%> </span></td>
-                                    <td><span> <%=dia_ori%> </span></td>
-                                    <td><span> <%=avpl_ori%> </span></td>
-                                    <td><span> <%=coc_ori%> </span></td>
+                                    <td><span id="onsize"> N/A </span></td>
+                                    <td><span id="oesize"> N/A </span></td>
+                                    <td><span id="odia"> un-Calculated </span></td>                                   
+                                    <td>
+                                        <span id="oavpl"> un-Calculated </span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                        
+                                        <button id="bo1">CALC*</button>
+                                    </td>                                   
+                                    <td>
+                                        <span id="ococ"> un-Calculated</span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button id="bo2">CALC*</button>
+                                    </td>                                  
                                 </tr>
                                 <tr>
                                     <th scope="row">Scaled</th>
-                                    <td><span> <%=scaledNodeSize%> </span></td>
-                                    <td><span> <%=scaledEdgeSize%> </span></td>
-                                    <td><span> <%=dia%> </span></td>
-                                    <td><span> <%=avpl%> </span></td>
-                                    <td><span> <%=coc%> </span></td>
+                                    <td><span id="snsize"> N/A </span></td>
+                                    <td><span id="sesize"> N/A </span></td>
+                                    <td><span id="sdia"> un-Calculated </span></td>
+                                    <td>
+                                        <span id="savpl">un-Calculated </span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button id="bs1">CALC*</button>
+                                    </td>                                  
+                                    <td>
+                                        <span id="scoc"> un-Calculated </span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button id="bs2">CALC*</button>
+                                    </td>                                   
                                 </tr>
                             </tbody>
-                        </table>                      
+                        </table>
                     </div>
                 </div>
                 <div class="row">
+                    <!-- Download Scaled Graph Form -->
                     <div class="col-md-7" align="left">
                         <form id="downScaledForm" action="DownloadScaledGraph">  
                             <a id="downScaledBtn" style="padding: 8px 16px;" class="btn btndow btn-lg">Download Scaled Graph</a>
@@ -402,8 +380,8 @@
                         <p><span class="glyphicon glyphicon-envelope "></span> a0054808@u.nus.edu</p>
                     </div>
                     <div class="col-sm-7">
-                        <form id="contactForm" action="SendEmail"
-                              target="rfFrame">
+                        <!-- Contact Form -->
+                        <form id="contactForm" action="SendEmail" target="ctiFrame">
                             <div class="row ">
                                 <div class="col-sm-6 form-group ">
                                     <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
@@ -421,7 +399,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <iframe id="rfFrame" name="rfFrame" src="about:blank" style="display:none;"></iframe> 
+                            <iframe id="ctiFrame" name="ctiFrame" src="about:blank" style="display:none;"></iframe> 
                         </form>
                         <script>
                             function submitContactForm() {
@@ -445,19 +423,37 @@
 
             <!-- Faulty Operations Prevention -->
             <script>
-                $(function () {
-                    var isUploaded = <%=isUploaded%>;
-                    var isScaled = <%=isScaled%>
-
-                    if (isUploaded === true) {
+                function validation() {
+                    var isUploaded = document.getElementById("isUploaded").value;
+                    var isScaled = document.getElementById("isScaled").value;
+//                    console.log(isUploaded);
+//                    console.log(isScaled);
+                    if (isUploaded === "true") {
                         $('#scaleBtn').attr('onclick', 'submitScaleForm()');
+                        $('#bo1').attr('onclick', 'getDiaAvp(false)');
+                        $('#bo2').attr('onclick', 'getCoc(false)');
                     }
-                    if (isScaled === true) {
-                        $('#gViz').attr('href', 'GraphViz.jsp');
-                        $('#dCmp').attr('href', 'DegreeComparison.jsp');
+                    if (isScaled === "true") {
+                        var nsizeParaString = "?onsize=" + document.getElementById("onsize").innerHTML
+                                + "&snsize=" + document.getElementById("snsize").innerHTML;
+
+                        var gvizUrl = "GraphViz.jsp" + nsizeParaString;
+                        $('#gViz').attr('href', gvizUrl);
+
+                        var dcmpUrl = "DegreeComparison.jsp" + nsizeParaString;
+                        $('#dCmp').attr("href", dcmpUrl);
+
                         $('#downScaledBtn').attr('onclick', 'submitDownScaledGraphForm()');
+                        $('#bs1').attr('onclick', 'getDiaAvp(true)');
+                        $('#bs2').attr('onclick', 'getCoc(true)');
+                    } else{
+                        $('#gViz').removeAttr('href');
+                        $('#dCmp').removeAttr("href");
+                        $('#downScaledBtn').removeAttr('onclick');
+                        $('#bs1').removeAttr('onclick');
+                        $('#bs2').removeAttr('onclick');
                     }
-                });
+                }
             </script>
         </div>    
     </body>

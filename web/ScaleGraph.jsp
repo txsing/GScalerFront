@@ -17,13 +17,8 @@
     String uploadedFilePath = session.getAttribute("uploadedFilePath").toString();
     String outputDir = session.getAttribute("uploadDir").toString();
     
-    
-
     String scaledNodeSize = request.getParameter("scaledNodeSize");
     String scaledEdgeSize = request.getParameter("scaledEdgeSize");
-    
-    session.setAttribute("scaledNodeSize", scaledNodeSize);
-    session.setAttribute("scaledEdgeSize", scaledEdgeSize);
     
     String[] args = new String[4];
     args[0] = uploadedFilePath;
@@ -41,12 +36,11 @@
     long end = new java.util.Date().getTime();
     session.setAttribute("end", end);
 
-    session.setAttribute("fp", uploadedFilePath);
+    //session.setAttribute("fp", uploadedFilePath);
 
     FileInputStream  fin = new FileInputStream(outputDir.concat("exception.txt"));
     if (fin.available() == 0) {
-        response.setStatus(response.SC_MOVED_TEMPORARILY);
-        response.setHeader("Location", "index.jsp#analysis");
+            session.setAttribute("isScaled", true);
     } else {
         response.setStatus(response.SC_MOVED_TEMPORARILY);
         response.setHeader("Location", "exceptions.jsp");

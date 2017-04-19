@@ -6,6 +6,7 @@
 package backtofront;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import propertycalculation.PropertyCalculation;
@@ -52,8 +53,8 @@ public class BasicStatisticCal {
 
         br = new BufferedReader(new FileReader(file2 + "effective-diameter.txt"));
         dia = br.readLine();
-        br.close();
-        return new String[]{avpl, dia};
+        br.close();       
+        return new String[]{dia, avpl};
     }
 
     public static String getAvgClusteringCof(String file1, String file2, String uploadDir)
@@ -68,7 +69,7 @@ public class BasicStatisticCal {
         args2[5] = "coc";
         PropertyCalculation pc1 = new PropertyCalculation();
         pc1.doMain(args2);
-        BufferedReader br = new BufferedReader(new FileReader(uploadDir.concat("ori.txt2COC.txt")));
+        BufferedReader br = new BufferedReader(new FileReader(file2.concat("2COC.txt")));
         String oc = br.readLine();
         br.close();
         int c = 1;
@@ -88,7 +89,17 @@ public class BasicStatisticCal {
         return coc;
     }
 
-    public static String getKSD() {
+    public static String getSCC(String file1Path, String file2Path) throws Exception {
+         String[] args1 = new String[6];
+         args1[0]="-i";
+         args1[1]=file1Path;
+         args1[2]="-m";
+         args1[3]="scc";
+         args1[4]="-o";
+         args1[5]=file2Path;
+         
+         PropertyCalculation pc=new PropertyCalculation();         
+         pc.doMain(args1);
         return null;
     }
 
