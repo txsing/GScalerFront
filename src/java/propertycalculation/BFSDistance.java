@@ -8,8 +8,6 @@ package propertycalculation;
 import edu.uci.ics.jung.graph.Graph;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-
 /**
  *
  * @author workshop

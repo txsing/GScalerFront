@@ -5,29 +5,9 @@
  */
 package propertycalculation;
 
-import edu.uci.ics.jung.algorithms.shortestpath.BFSDistanceLabeler;
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
-import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
-import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-//import static fakedcomparison.FakedComparison.file;
-//import static fakedcomparison.FakedComparison.realHop;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -55,7 +35,6 @@ public class CCThread implements Runnable {
         globalAverage( edgeMap,neighbourNode, temp);
     }
 private void globalAverage(HashSet<String> edgeMap, HashMap<String, HashSet<String>> neighbourNode, ArrayList<String> temp ) {
-     //   Set<String> ss = neighbourNode.keySet();
         double sum = 0;
         //Method 2
         double result = 0;

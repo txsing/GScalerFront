@@ -4,27 +4,13 @@
  * and open the template in the editor.
  */
 package propertycalculation;
-
-import edu.uci.ics.jung.algorithms.shortestpath.BFSDistanceLabeler;
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
-import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
-import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-//import static fakedcomparison.FakedComparison.file;
-//import static fakedcomparison.FakedComparison.realHop;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,24 +37,16 @@ public class ProcessThread implements Runnable {
         this.inte = get;
         this.p = p;
         this.q = q;
-        // this.dg1 =dg;
-        //     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     Graph<String, String> dg1;
     HashMap<String,HashSet<String>> outgoing;
     String dir = "";
+    
     ProcessThread(int i, ArrayList<Integer> get, Graph<String, String> dg1) {
         this.i = i;
         this.inte = get;
-        this.dg1 = dg1;
-        
-//  this.p=p;
-//  this.q=q;
-        // this.dg1 =dg;
-        //     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.dg1 = dg1;    
     }
-    /// DirectedGraph<String, DefaultEdge> dg1 = new DefaultDirectedGraph(DefaultEdge.class);
-
     ProcessThread(int i, ArrayList<Integer> get, HashMap<String, HashSet<String>> outGoing) {
           this.i = i;
         this.inte = get;
@@ -91,13 +69,11 @@ public class ProcessThread implements Runnable {
           TreeMap<Double,Double> results = new TreeMap<>();
       
         for (Map.Entry<Double, Integer> entry : realCoc.entrySet()) {
-       //     pw.println(entry.getKey() + " " + entry.getValue());
                  if (!results.containsKey(entry.getKey())){
                     results.put(entry.getKey(), entry.getValue()*1.0);
                 } else {
                     results.put(entry.getKey(), entry.getValue()+results.get(entry.getKey()));
                 }
-        //    System.out.println(entry.getKey() + " " + entry.getValue());
         }
         pw.close();
     }
