@@ -15,18 +15,12 @@
 
     <head>
         <title>Scaled Graph Visualization</title>
-
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
         <link rel="nus icon" type="image/vnd.microsoft.icon" href="favicon.ico"/>
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="js/cytoscape.min.js"></script>
-
-        <!-- for testing with local version of cytoscape.js -->
-        <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-
         <script src="js/dagre.min.js"></script>
         <script src="js/cytoscape-dagre.js"></script>
-
         <style>
             body {
                 font-family: helvetica;

@@ -258,7 +258,7 @@
                                         
                                     var scaleForm = document.getElementById('scaleForm');
                                     scaleForm.submit();
-                                    alert("Graph successfully scaled!");
+                                    alert("Graph is being scaled!");
                                     
                                     scaleForm.reset();
                                     validation();
